@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/starter/starter",
+    "pages/login/login",
+    "pages/profile/profile",
+    "pages/public-note/public-note",
+    "pages/my-note/my-note",
+    "pages/note-detail/note-detail",
+    "pages/note-edit/note-edit",
+    "pages/collect-list/collect-list",
+    "pages/category/category",
+    "pages/my-info/my-info",
+    "pages/create-note/create-note"
+  ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/public-note/public-note",
+        "text": "笔记广场"
+
+      },
+      {
+        "pagePath": "pages/create-note/create-note",
+        "text":"新建笔记"
+      },
+      {
+        "pagePath": "pages/my-note/my-note",
+        "text": "个人笔记"
+
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "个人中心"
+
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

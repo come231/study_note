@@ -1,0 +1,117 @@
+<view class="detail-container">
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 加载失败 -->
+  <view class="error-container" wx:if="{{loadError}}">
+    <image class="error-icon" src="/images/error.png" mode="aspectFit"></image>
+    <text class="error-text">加载失败，请重试</text>
+    <button class="retry-btn" bindtap="loadNoteDetail">重新加载</button>
+  </view>
+
+  <!-- 笔记详情内容 -->
+  <scroll-view class="note-scroll" scroll-y wx:if="{{!loading && !loadError && noteInfo}}">
+    <!-- 笔记头部信息 -->
+    <view class="note-header">
+      <text class="note-title">{{noteInfo.title || '无标题'}}</text>
+      
+      <view class="info-grid">
+        <view class="info-item">
+          <text class="label">分类：</text>
+          <text class="value">{{noteInfo.category_name || '未分类'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">发布时间：</text>
+          <text class="value">{{noteInfo.create_time}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">重要程度：</text>
+          <text class="value {{noteInfo.level === 1 ? 'level-high' : 'level-normal'}}">
+            {{noteInfo.level === 1 ? '非常重要' : (noteInfo.level === 2 ? '重要':'一般')}}
+          </text>
+        </view>
+        <view class="info-item">
+          <text class="label">隐私类型：</text>
+          <text class="value {{noteInfo.privacy_type === 1 ? 'privacy-private' : 'privacy-public'}}">
+            {{noteInfo.privacy_type === 1 ? '私有' : '公开'}}
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 作者信息卡片 -->
+    <view class="author-card" wx:if="{{!isOwner && noteInfo.privacy_type === 0}}">
+      <image class="avatar" src="{{noteInfo.author_avatar || app.globalData.defaultAvatarUrl}}" mode="aspectFill"></image>
+      <view class="author-info">
+        <text class="nickname">{{noteInfo.nickname || '匿名用户'}}</text>
+        <text class="tip-text">该笔记作者</text>
+      </view>
+    </view>
+
+    <!-- 笔记内容区 -->
+    <view class="content-area">
+      <text class="content-text">{{noteInfo.content || '无内容'}}</text>
+    </view>
+
+    <!-- ====================== 图片区域（新增） ====================== -->
+    <view class="media-section" wx:if="{{noteInfo.images && noteInfo.images.length > 0}}">
+      <view class="section-title">
+        <text class="icon">🖼️</text>
+        <text class="text">图片</text>
+      </view>
+      <view class="image-grid">
+        <view class="image-item" wx:for="{{noteInfo.images}}" wx:key="id" bindtap="previewImage" data-url="{{item.url}}">
+          <image class="preview-img" src="{{item.url}}" mode="aspectFill"></image>
+        </view>
+      </view>
+    </view>
+
+    <!-- ====================== 音频区域（新增） ====================== -->
+    <view class="media-section" wx:if="{{noteInfo.voices && noteInfo.voices.length > 0}}">
+      <view class="section-title">
+        <text class="icon">🎵</text>
+        <text class="text">音频</text>
+      </view>
+      <view class="audio-list">
+        <view class="audio-item" wx:for="{{noteInfo.voices}}" wx:key="id" bindtap="playAudio" data-url="{{item.url}}" data-index="{{index}}">
+          <view class="audio-icon">{{playingAudioIndex === index ? '🔇' : '▶️'}}</view>
+          <view class="audio-info">
+            <text class="audio-label">音频 {{index + 1}}</text>
+            <text class="audio-tip">点击播放</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 收藏数展示 -->
+    <view class="collect-count-area">
+      <image class="collect-icon" src="/static/image/icons/collect.png" mode="aspectFit"></image>
+      <text class="count-label">收藏数：</text>
+      <text class="count-value">{{collectCount}}</text>
+    </view>
+
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 底部固定操作栏 -->
+  <view class="bottom-operate-bar">
+    <button class="operate-btn back-btn" bindtap="goBack">
+      <text class="btn-text">返回</text>
+    </button>
+
+    <button class="operate-btn collect-btn {{isCollected ? 'collected' : ''}}" bindtap="toggleCollect">
+      <text class="btn-text">{{isCollected ? '取消收藏' : '收藏'}}</text>
+    </button>
+
+    <view class="owner-operate-group" wx:if="{{isOwner}}">
+      <button class="operate-btn edit-btn" bindtap="goToEdit">
+        <text class="btn-text">编辑</text>
+      </button>
+    </view>
+
+    <view class="placeholder" wx:if="{{!isOwner}}"></view>
+  </view>
+</view>

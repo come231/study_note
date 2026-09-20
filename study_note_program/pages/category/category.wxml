@@ -1,0 +1,169 @@
+<view class="category-container">
+  <!-- 顶部标题栏 -->
+  <view class="header">
+    <text class="title">分类管理</text>
+    <!-- 批量操作栏（选中分类时显示） -->
+    <view class="batch-action-bar" wx:if="{{showBatchBar}}">
+      <text class="selected-count">已选{{selectedIds.length}}个</text>
+      <button class="batch-delete-btn" bindtap="showDeleteModal">删除选中</button>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <scroll-view class="content-scroll" scroll-y>
+    <!-- 系统分类区 -->
+    <view class="category-section">
+      <view class="section-header">
+        <text class="section-title">系统分类</text>
+        <text class="section-desc">不可编辑的默认分类</text>
+      </view>
+      
+      <view class="system-category-list" wx:if="{{systemCategories.length > 0}}">
+        <view class="system-category-item" wx:for="{{systemCategories}}" wx:key="id">
+          <view class="category-tag">
+            <text class="tag-name">{{item.category_name}}</text>
+            <text class="tag-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="empty-tips" wx:else>
+        <text>暂无系统分类</text>
+      </view>
+    </view>
+
+    <!-- 自定义分类区 -->
+    <view class="category-section">
+      <view class="section-header">
+        <text class="section-title">自定义分类</text>
+        <text class="section-desc">可编辑、删除的个性化分类</text>
+        <!-- 操作按钮 -->
+        <button class="edit-mode-btn" bindtap="toggleEditMode">
+          {{isEditMode ? '取消选择' : '批量操作'}}
+        </button>
+      </view>
+      
+      <view class="custom-category-list" wx:if="{{customCategories.length > 0}}">
+        <!-- 重点修改：将 selectedIds.includes(item.id) 改为 indexOf 判断，增加 data-id 绑定 -->
+<view 
+  class="custom-category-item" 
+  wx:for="{{customCategories}}" 
+  wx:key="id"
+  bindtap="{{isEditMode ? 'selectCategory' : 'showEditForm'}}"
+  data-category="{{item}}">
+  <view class="category-card">
+    <!-- 选择框（批量操作模式显示）- 核心修改 -->
+    <view class="select-checkbox" wx:if="{{isEditMode}}">
+      <view class="checkbox {{selectedIds.indexOf(item.id) > -1 ? 'checked' : ''}}" data-id="{{item.id}}"></view>
+    </view>
+    <view class="card-content">
+      <text class="card-name">{{item.category_name}}</text>
+      <text class="card-desc" wx:if="{{item.description}}">{{item.description}}</text>
+      <text class="card-sort">优先级：{{item.sort}}</text>
+    </view>
+    <!-- 编辑按钮（非批量模式显示） -->
+    <view class="edit-btn" wx:if="{{!isEditMode}}" bindtap="showEditForm" data-category="{{item}}" catchtap>
+      <text>✏️</text>
+    </view>
+  </view>
+</view>
+      </view>
+      
+      <view class="empty-tips" wx:else>
+        <text>暂无自定义分类，点击下方按钮添加吧~</text>
+        <image class="empty-icon" src="/images/empty-category.png" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <!-- 功能说明区 -->
+    <view class="feature-desc-section">
+      <view class="section-header">
+        <text class="section-title">使用说明</text>
+      </view>
+      <view class="feature-list">
+        <view class="feature-item">
+          <text class="feature-icon">📌</text>
+          <text class="feature-text">点击自定义分类卡片可编辑名称、描述、优先级</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">🔢</text>
+          <text class="feature-text">优先级数值越小，分类展示越靠前</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">🗑️</text>
+          <text class="feature-text">删除分类后，该分类下的笔记会自动迁移至「其它」分类</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">✅</text>
+          <text class="feature-text">批量操作模式下可选择多个分类进行批量删除</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部操作按钮 -->
+  <view class="footer-btn-area">
+    <button class="add-category-btn" bindtap="showAddForm" loading="{{loading}}">新增自定义分类</button>
+  </view>
+
+  <!-- 新增/编辑分类弹窗 -->
+  <view class="modal-mask" wx:if="{{showFormModal}}" bindtap="hideFormModal"></view>
+  <view class="form-modal" wx:if="{{showFormModal}}">
+    <view class="modal-header">
+      <text class="modal-title">{{isEdit ? '编辑分类' : '新增分类'}}</text>
+    </view>
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">分类名称 *</text>
+        <input 
+          class="form-input" 
+          placeholder="请输入分类名称" 
+          value="{{formData.name}}" 
+          bindinput="onFormInput" 
+          data-key="name"
+          maxlength="20">
+        </input>
+      </view>
+      <view class="form-item">
+        <text class="form-label">分类描述</text>
+        <textarea 
+          class="form-textarea" 
+          placeholder="请输入分类描述（选填）" 
+          value="{{formData.description}}" 
+          bindinput="onFormInput" 
+          data-key="description"
+          maxlength="100">
+        </textarea>
+      </view>
+      <view class="form-item" wx:if="{{isEdit}}">
+        <text class="form-label">优先级</text>
+        <input 
+          class="form-input" 
+          placeholder="请输入优先级（数字越大越靠后）" 
+          value="{{formData.sort}}" 
+          bindinput="onFormInput" 
+          data-key="sort"
+          type="number"
+          min="0">
+        </input>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel-btn" bindtap="hideFormModal">取消</button>
+      <button class="modal-btn confirm-btn" bindtap="submitForm" loading="{{formLoading}}">{{isEdit ? '保存修改' : '创建分类'}}</button>
+    </view>
+  </view>
+
+  <!-- 批量删除确认弹窗 -->
+  <view class="modal-mask" wx:if="{{showDeleteModal}}" bindtap="hideDeleteModal"></view>
+  <view class="delete-modal" wx:if="{{showDeleteModal}}">
+    <view class="delete-content">
+      <text class="delete-title">确认删除</text>
+      <text class="delete-desc">确定要删除选中的{{selectedIds.length}}个分类吗？删除后分类下的笔记会迁移至「其它」分类</text>
+      <view class="delete-btns">
+        <button class="modal-btn cancel-btn" bindtap="hideDeleteModal">取消</button>
+        <button class="modal-btn delete-confirm-btn" bindtap="confirmBatchDelete" loading="{{deleteLoading}}">确定删除</button>
+      </view>
+    </view>
+  </view>
+</view>

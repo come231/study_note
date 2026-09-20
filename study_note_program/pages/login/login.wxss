@@ -1,0 +1,199 @@
+/* 全局样式重置 */
+page {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.login-container {
+  padding: 60rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 顶部标题 */
+.page-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10rpx;
+  letter-spacing: 2rpx;
+}
+
+.page-subtitle {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 60rpx;
+}
+
+/* 头像区域 */
+.avatar-box {
+  margin-bottom: 50rpx;
+}
+
+.avatar-bg {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 90rpx;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10rpx);
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 70rpx;
+  border: 4rpx solid #fff;
+}
+
+/* 标签切换 */
+.tab-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.tab-item {
+  font-size: 32rpx;
+  padding: 0 30rpx;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #fff;
+  font-weight: 700;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 6rpx;
+  background: #fff;
+  border-radius: 3rpx;
+}
+
+.tab-split {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 表单容器 */
+.form-wrapper {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20rpx;
+  padding: 50rpx 40rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20rpx);
+  margin-bottom: 40rpx;
+}
+
+.form-box {
+  width: 100%;
+}
+
+/* 输入框样式 */
+.input-item {
+  margin-bottom: 30rpx;
+  position: relative;
+  border-bottom: 2rpx solid #f0f5ff;
+  padding-bottom: 10rpx;
+}
+
+/* 密码输入框特殊样式 */
+.pwd-item {
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #667eea;
+  z-index: 1;
+}
+
+.input {
+  width: 100%;
+  height: 80rpx;
+  font-size: 28rpx;
+  padding-left: 50rpx;
+  padding-right: 60rpx; /* 给图片图标留出更大空间 */
+  box-sizing: border-box;
+  color: #333;
+  background: transparent;
+}
+
+.input-placeholder {
+  color: #999;
+  font-size: 26rpx;
+}
+
+/* 密码图片图标样式（关键） */
+.pwd-icon {
+  position: absolute;
+  right: 10rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32rpx;
+  height: 32rpx;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* 错误提示 */
+.tips {
+  display: block;
+  font-size: 24rpx;
+  color: #ff4757;
+  padding: 10rpx 0 0 50rpx;
+  line-height: 1.2;
+}
+.tips.success {
+  color: #07c160; /* 可用提示为绿色 */
+}
+
+/* 提交按钮 */
+.submit-btn {
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  color: #fff;
+  border-radius: 45rpx;
+  font-size: 32rpx;
+  margin-top: 20rpx;
+  font-weight: 600;
+  box-shadow: 0 8rpx 16rpx rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.submit-btn::after {
+  border: none;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 4rpx 8rpx rgba(102, 126, 234, 0.3);
+}
+
+/* 底部版权 */
+.copyright {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 20rpx;
+}

@@ -1,0 +1,124 @@
+<view class="login-container">
+  <!-- 顶部标题 -->
+  <view class="page-title">笔记小站</view>
+  <view class="page-subtitle">记录你的每一份灵感</view>
+
+  <!-- 头像区域 -->
+  <view class="avatar-box">
+    <view class="avatar-bg">
+      <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    </view>
+  </view>
+
+  <!-- 切换登录/注册表单 -->
+  <view class="tab-box">
+    <text class="tab-item {{!isRegister ? 'active' : ''}}" bindtap="switchToLogin">登录</text>
+    <text class="tab-split">|</text>
+    <text class="tab-item {{isRegister ? 'active' : ''}}" bindtap="switchToRegister">注册</text>
+  </view>
+
+  <!-- 表单容器 -->
+  <view class="form-wrapper">
+    <!-- 登录表单 -->
+    <view class="form-box" wx:if="{{!isRegister}}">
+      <view class="input-item">
+        <icon class="input-icon" type="user" size="20"></icon>
+        <input 
+          class="input" 
+          placeholder="请输入用户名" 
+          value="{{username}}" 
+          bindinput="handleUsernameInput"
+          type="text"
+          placeholder-class="input-placeholder"
+        />
+      </view>
+      <view class="input-item pwd-item">
+        <icon class="input-icon" type="locked" size="20"></icon>
+        <!-- 用password属性，更稳定 -->
+        <input 
+          class="input" 
+          placeholder="请输入密码" 
+          value="{{password}}" 
+          bindinput="handlePasswordInput"
+          password="{{!loginPwdVisible}}"
+          placeholder-class="input-placeholder"
+        />
+        <!-- 替换为图片眼睛图标 -->
+        <image 
+          class="pwd-icon" 
+          src="{{loginPwdVisible ? '/static/image/icons/login_show.jpg' : '/static/image/icons/login_hide.png'}}" 
+          bindtap="togglePwdVisible" 
+          data-type="login"
+        />
+      </view>
+      <button class="submit-btn" bindtap="handleLogin">登录</button>
+    </view>
+
+    <!-- 注册表单 -->
+    <view class="form-box" wx:if="{{isRegister}}">
+      <view class="input-item">
+        <icon class="input-icon" type="user" size="20"></icon>
+        <input 
+          class="input" 
+          placeholder="用户名（仅字母/数字）" 
+          value="{{regUsername}}" 
+          bindinput="handleRegUsernameInput"
+          type="text"
+          placeholder-class="input-placeholder"
+        />
+        <text class="tips {{regUsernameError === '用户名可用' ? 'success' : ''}}" wx:if="{{regUsernameError}}">{{regUsernameError}}</text>
+      </view>
+      <view class="input-item">
+        <icon class="input-icon" type="nickname" size="20"></icon>
+        <input 
+          class="input" 
+          placeholder="请输入昵称（可含中文）" 
+          value="{{regNickname}}" 
+          bindinput="handleRegNicknameInput"
+          type="text"
+          placeholder-class="input-placeholder"
+        />
+        <text class="tips {{regNicknameError === '昵称可用' ? 'success' : ''}}" wx:if="{{regNicknameError}}">{{regNicknameError}}</text>
+      </view>
+      <view class="input-item pwd-item">
+        <icon class="input-icon" type="locked" size="20"></icon>
+        <input 
+          class="input" 
+          placeholder="请输入密码" 
+          value="{{regPassword1}}" 
+          bindinput="handleRegPassword1Input"
+          password="{{!regPwd1Visible}}"
+          placeholder-class="input-placeholder"
+        />
+        <image 
+          class="pwd-icon" 
+          src="{{regPwd1Visible ? '/static/image/icons/login_show.jpg' : '/static/image/icons/login_hide.png'}}" 
+          bindtap="togglePwdVisible" 
+          data-type="reg1"
+        />
+      </view>
+      <view class="input-item pwd-item">
+        <icon class="input-icon" type="locked" size="20"></icon>
+        <input 
+          class="input" 
+          placeholder="请确认密码" 
+          value="{{regPassword2}}" 
+          bindinput="handleRegPassword2Input"
+          password="{{!regPwd2Visible}}"
+          placeholder-class="input-placeholder"
+        />
+        <text class="tips" wx:if="{{pwdError}}">{{pwdError}}</text>
+        <image 
+          class="pwd-icon" 
+          src="{{regPwd2Visible ? '/static/image/icons/login_show.jpg' : '/static/image/icons/login_hide.png'}}"
+          bindtap="togglePwdVisible" 
+          data-type="reg2"
+        />
+      </view>
+      <button class="submit-btn" bindtap="handleRegister">注册</button>
+    </view>
+  </view>
+
+  <!-- 底部版权 -->
+  <view class="copyright">© 2026 笔记小站 版权所有</view>
+</view>

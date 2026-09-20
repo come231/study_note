@@ -1,0 +1,110 @@
+<view class="page-container">
+  <!-- 顶部搜索区 -->
+  <view class="search-fixed">
+    <view class="search-bar">
+      <!-- 搜索类型切换 -->
+      <view class="search-type">
+        <view class="type-item {{searchType === 'title' ? 'active' : ''}}" bindtap="switchSearchType" data-type="title">
+          <text class="type-text">标题</text>
+        </view>
+        <view class="type-item {{searchType === 'nickname' ? 'active' : ''}}" bindtap="switchSearchType" data-type="nickname">
+          <text class="type-text">作者</text>
+        </view>
+      </view>
+      
+      <!-- 搜索输入框 -->
+      <view class="search-input-wrap">
+        <input 
+          class="search-input" 
+          placeholder="请输入{{searchType === 'title' ? '标题' : '作者昵称'}}关键词" 
+          value="{{searchKeyword}}"
+          bindinput="onSearchInput"
+          confirm-type="search"
+          bindconfirm="doSearch"
+        />
+        <view class="clear-btn" wx:if="{{searchKeyword}}" bindtap="clearSearch">
+          <text class="clear-icon">×</text>
+        </view>
+      </view>
+      
+      <!-- 搜索按钮 -->
+      <button class="search-btn" bindtap="doSearch" loading="{{searchLoading}}">
+        <text class="search-btn-text">搜索</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 固定顶部分类栏（下移） -->
+  <view class="category-fixed">
+    <view class="category-bar">
+      <scroll-view scroll-x class="category-scroll" show-scrollbar="{{false}}">
+        <view class="category-item {{activeCategory === 0 ? 'active' : ''}}"
+          bindtap="switchCategory" data-category-id="0">
+          <text class="category-text">全部</text>
+        </view>
+        <view class="category-item {{activeCategory === item.id ? 'active' : ''}}"
+          wx:for="{{systemCategoryList}}" wx:key="id"
+          bindtap="switchCategory" data-category-id="{{item.id}}">
+          <text class="category-text">{{item.category_name}}</text>
+        </view>
+        <view class="category-item {{activeCategory === 999 ? 'active' : ''}}"
+          bindtap="switchCategory" data-category-id="999">
+          <text class="category-text">其它</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 笔记列表（空出搜索+分类栏高度） -->
+  <scroll-view
+    class="note-list"
+    scroll-y
+    bindscrolltolower="onReachBottom"
+    lower-threshold="50"
+  >
+    <!-- 加载中（初始） -->
+    <view class="loading-container" wx:if="{{loading && notes.length === 0}}">
+      <text class="loading-text">加载中...</text>
+    </view>
+
+    <!-- 空数据 -->
+    <view class="empty-container" wx:if="{{!loading && notes.length === 0}}">
+      <text class="empty-text">暂无{{activeCategoryName}}{{searchKeyword ? '“' + searchKeyword + '”' : ''}}相关笔记</text>
+    </view>
+
+    <!-- 笔记列表项 -->
+    <view class="note-item" wx:for="{{notes}}" wx:key="id"
+      bindtap="goToDetail" data-note-id="{{item.id}}" data-user-id="{{item.user_id}}" data-collect-count="{{item.collect_count}}">
+      <view class="category-tag">{{item.category_name || '其它'}}</view>
+      <view class="note-content">
+        <text class="note-title">{{item.title}}</text>
+        <text class="note-preview">{{item.content || ''}}</text>
+      </view>
+
+      <view class="note-footer">
+        <view class="author-info">
+          <image class="avatar" src="{{item.avatar || app.globalData.defaultAvatarUrl}}" mode="circle"></image>
+          <text class="author-name">{{item.nickname || '匿名用户'}}</text>
+        </view>
+        <view class="time-info">
+          <text class="time-label">发布时间：</text>
+          <text class="time-text">{{item.create_time || ''}}</text>
+        </view>
+        <view class="collect-container">
+          <text class="collect-label">收藏数：</text>
+          <text class="collect-count">{{item.collect_count || 0}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{loading && notes.length > 0}}">
+      <text class="load-more-text">加载中...</text>
+    </view>
+
+    <!-- 到底提示 -->
+    <view class="no-more-tip" wx:if="{{!hasMore && notes.length > 0}}">
+      <text class="no-more-text">已经到底啦，没有更多笔记了~</text>
+    </view>
+  </scroll-view>
+</view>

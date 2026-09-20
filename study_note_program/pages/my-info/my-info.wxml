@@ -1,0 +1,105 @@
+<view class="info-container">
+  <!-- 头像修改区域 -->
+  <view class="avatar-section">
+    <view class="avatar-title">头像设置</view>
+    <view class="avatar-wrapper" bindtap="chooseAvatar">
+      <image class="user-avatar" src="{{userInfo.userAvatar || defaultAvatarUrl}}" mode="aspectFill"></image>
+      <view class="avatar-tips">点击更换头像</view>
+    </view>
+  </view>
+
+  <!-- 基础信息修改区域 -->
+  <view class="form-section">
+    <view class="form-title">基础信息</view>
+    
+    <!-- 用户名 -->
+    <view class="form-item">
+      <text class="item-label">用户名</text>
+      <input 
+        class="item-input" 
+        placeholder="请输入用户名" 
+        value="{{formData.username}}" 
+        bindinput="onInputChange" 
+        data-key="username"
+        maxlength="20">
+      </input>
+    </view>
+
+    <!-- 昵称 -->
+    <view class="form-item">
+      <text class="item-label">昵称</text>
+      <input 
+        class="item-input" 
+        placeholder="请输入昵称" 
+        value="{{formData.nickname}}" 
+        bindinput="onInputChange" 
+        data-key="nickname"
+        maxlength="20">
+      </input>
+    </view>
+
+    <!-- 手机号 -->
+    <view class="form-item">
+      <text class="item-label">手机号</text>
+      <input 
+        class="item-input" 
+        placeholder="请输入手机号" 
+        value="{{formData.phone}}" 
+        bindinput="onInputChange" 
+        data-key="phone"
+        type="number"
+        maxlength="11">
+      </input>
+    </view>
+  </view>
+
+  <!-- 密码修改区域 -->
+  <view class="password-section">
+    <view class="form-title">密码修改</view>
+    
+    <!-- 原密码 -->
+    <view class="form-item">
+      <text class="item-label">原密码</text>
+      <input 
+        class="item-input" 
+        placeholder="请输入原密码" 
+        value="{{pwdData.oldPwd}}" 
+        bindinput="onPwdChange" 
+        data-key="oldPwd"
+        password>
+      </input>
+    </view>
+
+    <!-- 新密码 -->
+    <view class="form-item">
+      <text class="item-label">新密码</text>
+      <input 
+        class="item-input" 
+        placeholder="请输入新密码（6-20位）" 
+        value="{{pwdData.newPwd}}" 
+        bindinput="onPwdChange" 
+        data-key="newPwd"
+        password>
+      </input>
+    </view>
+
+    <!-- 确认新密码 -->
+    <view class="form-item">
+      <text class="item-label">确认新密码</text>
+      <input 
+        class="item-input" 
+        placeholder="请再次输入新密码" 
+        value="{{pwdData.confirmPwd}}" 
+        bindinput="onPwdChange" 
+        data-key="confirmPwd"
+        password>
+      </input>
+    </view>
+  </view>
+
+  <!-- 提交按钮区域 -->
+  <view class="btn-section">
+    <button class="save-info-btn" bindtap="saveUserInfo" loading="{{saving}}">保存基础信息</button>
+    <button class="change-pwd-btn" bindtap="changePassword" loading="{{pwdChanging}}">修改密码</button>
+  </view>
+</view>

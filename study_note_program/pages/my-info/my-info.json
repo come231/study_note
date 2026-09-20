@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "账号信息",
+  "enablePullDownRefresh": false,
+  "backgroundColor": "#f5f5f5"
+}

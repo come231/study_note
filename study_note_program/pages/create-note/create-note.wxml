@@ -1,0 +1,149 @@
+<view class="create-note-container">
+
+<!-- 未登录 -->
+<view wx:if="{{!isLogin}}" class="not-login-box">
+  <view class="login-card">
+    <view class="icon-box">🔐</view>
+    <text class="title">请先登录</text>
+    <text class="desc">登录后即可创建、编辑你的个人笔记</text>
+    <button class="go-login-btn" bindtap="goToLogin">前往登录</button>
+  </view>
+</view>
+
+<!-- 已登录 -->
+<view wx:else class="note-edit-container">
+  <!-- 顶部导航 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="navBack">
+      <text class="icon">←</text>
+    </view>
+    <view class="nav-title">创建新笔记</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 表单滚动 -->
+  <scroll-view class="form-scroll" scroll-y enhanced>
+    <!-- 标题 -->
+    <view class="form-item card-item">
+      <label class="form-label">
+        <text class="label-icon">📝</text>笔记标题 <text class="required">*</text>
+      </label>
+      <input 
+        class="form-input {{inputFocus ? 'input-focus' : ''}}" 
+        placeholder="请输入笔记标题（不超过50字）" 
+        value="{{noteForm.title}}"
+        bindinput="onTitleInput"
+        bindfocus="onInputFocus"
+        bindblur="onInputBlur"
+        maxlength="50"
+      />
+    </view>
+
+    <!-- 内容 -->
+    <view class="form-item card-item">
+      <label class="form-label">
+        <text class="label-icon">✍️</text>笔记内容 <text class="required">*</text>
+      </label>
+      <textarea 
+        class="form-textarea {{inputFocus ? 'input-focus' : ''}}" 
+        placeholder="请输入笔记内容（不超过2000字）" 
+        value="{{noteForm.content}}"
+        bindinput="onContentInput"
+        auto-height
+        maxlength="2000"
+        bindfocus="onInputFocus"
+        bindblur="onInputBlur"
+      />
+    </view>
+
+    <!-- 多媒体区域 -->
+    <view class="form-item card-item media-section">
+      <label class="form-label media-label">
+        <text class="label-icon">🖼️ 🎙️</text>多媒体素材
+      </label>
+
+      <view class="media-btn-group">
+        <button class="media-btn" bindtap="chooseImage">
+          <text class="media-icon">🖼️</text>
+          <view class="media-info">
+            <text class="btn-text">添加图片</text>
+            <text class="count">{{noteForm.images.length}}/9</text>
+          </view>
+        </button>
+        <button class="media-btn" bindtap="chooseAudio">
+          <text class="media-icon">🎙️</text>
+          <view class="media-info">
+            <text class="btn-text">添加音频</text>
+            <text class="count">{{noteForm.audios.length}}/5</text>
+          </view>
+        </button>
+      </view>
+
+      <!-- 图片预览 -->
+      <view class="preview-group" wx:if="{{noteForm.images.length > 0}}">
+        <text class="group-title">已选图片</text>
+        <view class="image-grid">
+          <view class="image-item" wx:for="{{noteForm.images}}" wx:key="index">
+            <image class="preview-img" src="{{item.url}}" mode="aspectFill" bindtap="previewImage" data-url="{{item.url}}"></image>
+            <view class="del" bindtap="deleteMedia" data-type="image" data-index="{{index}}">×</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 音频预览 -->
+      <view class="preview-group" wx:if="{{noteForm.audios.length > 0}}">
+        <text class="group-title">已选音频</text>
+        <view class="audio-list">
+          <view class="audio-item" wx:for="{{noteForm.audios}}" wx:key="index">
+            <view class="audio-play" bindtap="playAudio" data-url="{{item.url}}" data-index="{{index}}">
+              <text class="play-icon">{{playingAudioIndex === index ? '⏸️' : '▶️'}}</text>
+              <text class="name">音频{{index+1}}</text>
+              <text class="time">{{item.duration}}</text>
+            </view>
+            <view class="del" bindtap="deleteMedia" data-type="audio" data-index="{{index}}">×</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 选项 -->
+    <view class="form-item card-item">
+      <label class="form-label"><text class="label-icon">📂</text>笔记分类 <text class="required">*</text></label>
+      <picker mode="selector" range="{{categories}}" range-key="category_name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="picker-row">
+          <text class="picker-text">{{categories[categoryIndex].category_name || '请选择分类'}}</text>
+          <text class="arrow">▶</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item card-item">
+      <label class="form-label"><text class="label-icon">⭐</text>重要程度</label>
+      <picker mode="selector" range="{{levelOptions}}" range-key="name" value="{{levelIndex}}" bindchange="onLevelChange">
+        <view class="picker-row">
+          <text class="picker-text {{levelOptions[levelIndex].class}}">{{levelOptions[levelIndex].name}}</text>
+          <text class="arrow">▶</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item card-item">
+      <label class="form-label"><text class="label-icon">🔒</text>隐私类型</label>
+      <picker mode="selector" range="{{privacyOptions}}" range-key="name" value="{{privacyIndex}}" bindchange="onPrivacyChange">
+        <view class="picker-row">
+          <text class="picker-text">{{privacyOptions[privacyIndex].name}}</text>
+          <text class="arrow">▶</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 底部按钮 -->
+  <view class="btn-bar">
+    <button class="btn reset" bindtap="resetForm" disabled="{{submitting}}">重置</button>
+    <button class="btn submit" bindtap="submitForm" loading="{{submitting}}" disabled="{{submitting}}">创建笔记</button>
+  </view>
+</view>
+</view>

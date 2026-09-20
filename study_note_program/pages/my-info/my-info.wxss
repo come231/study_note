@@ -1,0 +1,115 @@
+page {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.info-container {
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+/* 头像区域 */
+.avatar-section {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 30, 80, 0.06);
+  text-align: center;
+}
+
+.avatar-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1d2129;
+  margin-bottom: 30rpx;
+}
+
+.avatar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.avatar-tips {
+  font-size: 24rpx;
+  color: #8c95b3;
+  margin-top: 16rpx;
+}
+
+/* 表单区域 */
+.form-section,
+.password-section {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 30rpx rgba(0, 30, 80, 0.06);
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1d2129;
+  margin-bottom: 30rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f2f7;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.item-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #2b3351;
+  font-weight: 500;
+}
+
+.item-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #33394d;
+}
+
+/* 按钮 */
+.btn-section {
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.save-info-btn,
+.change-pwd-btn {
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  border: none;
+}
+
+.save-info-btn {
+  background: linear-gradient(135deg, #5b71e8, #7392ff);
+  color: #fff;
+}
+
+.change-pwd-btn {
+  background: linear-gradient(135deg, #ff7d50, #ff4d4f);
+  color: #fff;
+}

@@ -1,0 +1,141 @@
+/* 全局样式 */
+page {
+  background-color: #f7f8fa;
+  min-height: 100vh;
+}
+.profile-container {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 30rpx;
+}
+
+/* 用户信息区 */
+.user-info-section {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+}
+.avatar-wrapper {
+  position: relative;
+  margin-right: 24rpx;
+}
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid #f0f2f5;
+}
+.login-tips {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20rpx;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.nickname {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+.username {
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+.unlogin-text {
+  font-size: 32rpx;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* 功能列表 */
+.function-list {
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+.function-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+.function-item:last-child {
+  border-bottom: none;
+}
+.function-item:active {
+  background-color: #f9fafb;
+}
+.item-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+.icon-text {
+  font-size: 32rpx;
+}
+.item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+.item-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #1f2937;
+}
+.item-desc {
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+.item-arrow {
+  font-size: 28rpx;
+  color: #d1d5db;
+  font-weight: 300;
+}
+
+/* 退出登录按钮 */
+.logout-section {
+  margin-top: auto;
+  padding: 0 30rpx 40rpx;
+}
+.logout-btn {
+  width: 100%;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  font-size: 28rpx;
+  border-radius: 40rpx;
+  border: none;
+  box-shadow: 0 6rpx 25rpx rgba(102, 126, 234, 0.4);
+}
+.logout-btn::after {
+  border: none;
+}
+.logout-btn:active {
+  transform: translateY(2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(102, 126, 234, 0.3);
+}

@@ -1,0 +1,191 @@
+<view class="note-edit-container">
+  <!-- 顶部导航栏 -->
+  <view class="nav-bar">
+    <view class="nav-left" bindtap="navBack" hover-class="nav-hover">
+      <text class="icon">←</text>
+    </view>
+    <view class="nav-title">{{isEdit ? '编辑笔记' : '新建笔记'}}</view>
+    <view class="nav-right"></view>
+  </view>
+
+  <!-- 表单主体（可滚动，增加底部内边距避免遮挡） -->
+  <scroll-view class="form-scroll" scroll-y enhanced show-scrollbar="{{false}}" scroll-with-animation>
+    <!-- 标题输入 -->
+    <view class="form-item title-item">
+    <!-- 上次更新时间：新加在这里 -->
+      <view class="update-time" wx:if="{{noteInfo.update_time}}">
+        <text class="time-icon">🕒</text>
+        <text class="time-text">上次更新：{{noteInfo.update_time}}</text>
+      </view>
+      <label class="form-label">
+        <text class="label-icon">📝</text>
+        标题 
+        <text class="required">*</text>
+      </label>
+      <input 
+        class="form-input {{inputFocus ? 'input-focus' : ''}}" 
+        placeholder="请输入笔记标题（最多50字）" 
+        value="{{noteInfo.title}}" 
+        bindinput="handleTitleInput"
+        maxlength="50"
+        placeholder-class="placeholder-style"
+        focus="{{!isEdit && !noteInfo.title}}"
+        bindfocus="handleInputFocus"
+        bindblur="handleInputBlur"
+      />
+    </view>
+
+    <!-- 内容输入 -->
+    <view class="form-item content-item">
+      <label class="form-label">
+        <text class="label-icon">✍️</text>
+        内容 
+        <text class="required">*</text>
+      </label>
+      <textarea 
+        class="form-textarea {{inputFocus ? 'input-focus' : ''}}" 
+        placeholder="请输入笔记内容（最多2000字）" 
+        value="{{noteInfo.content}}" 
+        bindinput="handleContentInput"
+        auto-height
+        maxlength="2000"
+        placeholder-class="placeholder-style"
+        bindfocus="handleInputFocus"
+        bindblur="handleInputBlur"
+      />
+
+      <!-- 多媒体操作区（移到内容输入下方） -->
+      <view class="media-operate-area">
+        <label class="form-label media-label">
+          <text class="label-icon">🖼️/🎙️</text>
+          多媒体资源
+        </label>
+        <view class="media-btn-group">
+          <button class="media-btn image-btn" bindtap="chooseImage" hover-class="media-btn-hover">
+            <text class="media-icon">🖼️</text>
+            <text class="media-text">添加图片</text>
+            <text class="media-count">{{noteInfo.images.length}}/{{maxImageCount}}</text>
+          </button>
+          <button class="media-btn voice-btn" bindtap="chooseAudio" hover-class="media-btn-hover">
+            <text class="media-icon">🎙️</text>
+            <text class="media-text">添加音频</text>
+            <text class="media-count">{{noteInfo.audios.length}}/{{maxAudioCount}}</text>
+          </button>
+        </view>
+
+        <!-- 已选图片预览 -->
+        <view class="media-preview-area" wx:if="{{noteInfo.images.length > 0}}">
+          <view class="preview-title">已选图片</view>
+          <view class="image-preview-list">
+            <view class="image-item" wx:for="{{noteInfo.images}}" wx:key="index" hover-class="image-item-hover">
+              <image class="preview-img" src="{{item.url}}" mode="aspectFill" bindtap="previewImage" data-url="{{item.url}}"></image>
+              <view class="delete-img" bindtap="deleteMedia" data-type="image" data-index="{{index}}" data-id="{{item.id}}" hover-class="delete-hover">×</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 已选音频预览（替换原语音） -->
+        <view class="media-preview-area" wx:if="{{noteInfo.audios.length > 0}}">
+          <view class="preview-title">已选音频</view>
+          <view class="audio-preview-list">
+            <view class="audio-item" wx:for="{{noteInfo.audios}}" wx:key="index" hover-class="audio-item-hover">
+              <view class="audio-info" bindtap="playAudio" data-url="{{item.url}}" data-index="{{index}}">
+                <text class="audio-icon">{{playingAudioIndex === index ? '⏸️' : '▶️'}}</text>
+                <text class="audio-text">音频{{index+1}}</text>
+                <text class="audio-duration">{{item.duration || '00:00'}}</text>
+              </view>
+              <view class="delete-audio" bindtap="deleteMedia" data-type="audio" data-index="{{index}}" data-id="{{item.id}}" hover-class="delete-hover">×</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分类选择（默认回显笔记内容） -->
+    <view class="form-item selector-item">
+      <label class="form-label">
+        <text class="label-icon">📂</text>
+        分类 
+        <text class="required">*</text>
+      </label>
+      <picker 
+        mode="selector" 
+        range="{{categoryList}}" 
+        range-key="category_name"
+        value="{{categoryIndex}}" 
+        bindchange="handleCategoryChange"
+        class="picker-container"
+      >
+        <view class="picker-wrap" hover-class="picker-hover">
+          <text class="picker-text">{{categoryList[categoryIndex].category_name || '请选择分类'}}</text>
+          <text class="picker-icon">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 重要程度选择（默认回显笔记内容） -->
+    <view class="form-item selector-item">
+      <label class="form-label">
+        <text class="label-icon">⭐</text>
+        重要程度 
+        <text class="required">*</text>
+      </label>
+      <picker 
+        mode="selector" 
+        range="{{levelList}}" 
+        range-key="name"
+        value="{{levelIndex}}" 
+        bindchange="handleLevelChange"
+        class="picker-container"
+      >
+        <view class="picker-wrap" hover-class="picker-hover">
+          <text class="picker-text {{levelList[levelIndex].class}}">{{levelList[levelIndex].name || '请选择重要程度'}}</text>
+          <text class="picker-icon">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 隐私类型选择（默认回显笔记内容） -->
+    <view class="form-item selector-item">
+      <label class="form-label">
+        <text class="label-icon">🔒</text>
+        隐私类型 
+        <text class="required">*</text>
+      </label>
+      <picker 
+        mode="selector" 
+        range="{{privacyList}}" 
+        range-key="name"
+        value="{{privacyIndex}}" 
+        bindchange="handlePrivacyChange"
+        class="picker-container"
+      >
+        <view class="picker-wrap" hover-class="picker-hover">
+          <text class="picker-text">{{privacyList[privacyIndex].name || '请选择隐私类型'}}</text>
+          <text class="picker-icon">▼</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 空状态提示（仅新建页） -->
+    <view class="empty-tip" wx:if="{{!isEdit && noteInfo.images.length === 0 && noteInfo.audios.length === 0}}">
+      <text class="empty-icon">💡</text>
+      <text class="empty-text">可添加图片/音频让笔记更丰富～</text>
+    </view>
+
+    <!-- 底部空白区（确保滑动时多媒体区完全显示） -->
+    <view class="scroll-bottom-space"></view>
+  </scroll-view>
+
+  <!-- 底部按钮栏（固定） -->
+  <view class="btn-bar fixed-bar">
+    <button class="reset-btn" bindtap="handleDelete" disabled="{{loading}}" hover-class="reset-btn-hover">
+      <text class="btn-icon">🗑️</text>
+      删除
+    </button>
+    <button class="save-btn" bindtap="handleSave" loading="{{loading}}" disabled="{{loading}}" hover-class="save-btn-hover">
+      <text class="btn-icon">{{isEdit ? '💾' : '✓'}}</text>
+      {{isEdit ? '保存修改' : '创建笔记'}}
+    </button>
+  </view>
+</view>
